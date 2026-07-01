@@ -1,1 +1,59 @@
+Hybrid Remote & Bluetooth Soccer Bot
 
+A high-performance, responsive hybrid robotic platform optimized specifically for Robo-Soccer Matches. This system features an automatic dual-control mechanism that
+seamlessly switches between a FlySky i6X Transmitter (using the zero-lag i-BUS protocol) and a Smartphone Controller via Bluetooth, ensuring continuous action during
+intense gameplay.
+
+ Key Technical Features
+- **Zero-Latency Response:** Uses the **FlySky i-BUS protocol** tied to the microcontroller's hardware serial port for split-second reaction times.
+- **Smart Autonomous Switching:** Automatically shifts control to Bluetooth mode when the RC transmitter is switched off or disconnected.
+- **Proportional Throttle Control:** The remote's Stick 3 (Throttle) serves as a dynamic speed multiplier ($0\%$ to $100\%$) for maximum driving precision.
+- **Aggressive Diagonal Maneuvers:** Custom code adjustments ($0.1$ speed multiplier) for inputs like `G`, `I`, `H`, and `J` allow incredibly sharp diagonal turns to outmaneuver opponents on the field.
+- **Robust Driver Configuration:** Designed to drive dual BTS7960 high-current motor drivers using continuous PWM directional switching.
+
+---
+
+## 🎛️ Pin Mapping (Arduino Pro Micro / Nano / Uno)
+
+> ⚠️ **CRITICAL WARNING:** Always unplug the FlySky receiver's signal wire from the Arduino's hardware **RX pin** before uploading the code, or the compilation/upload process will fail!
+
+| Arduino Pin | Connection Component | Controller Map / Input Action |
+| :---: | :--- | :--- |
+| **RX (Serial)** | FlySky Receiver (i-BUS Out) | Master Wireless Control (Ch1, Ch2, Ch3) |
+| **D2 (Soft RX)** | HC-05 Bluetooth -> **TXD** | App Smartphone Telemetry (Read) |
+| **D3 (Soft TX)** | HC-05 Bluetooth -> **RXD** | App Smartphone Telemetry (Write) |
+| **D5** | Left Motor -> **RPWM_L** | Left Wheel Forward Drive |
+| **D6** | Left Motor -> **LPWM_L** | Left Wheel Backward Drive |
+| **D9** | Right Motor -> **RPWM_R** | Right Wheel Forward Drive |
+| **D10** | Right Motor -> **LPWM_R** | Right Wheel Backward Drive |
+
+*Note: Make sure to bridge the `R_EN` and `L_EN` pins of both BTS7960 drivers directly to the **5V (VCC)** power line to keep them active.*
+
+---
+
+## 📱 Smartphone Bluetooth Layout
+
+When the FlySky remote goes offline, download any standard Bluetooth RC Controller app and assign these variables:
+
+### 🏃 Driving Operations
+- `F` / `B` : Move Forward / Move Backward
+- `L` / `R` : Turn Left / Turn Right
+- `S` / `D` : Hard Stop / Electronic Brake
+
+### 📐 Tactical Diagonal Turns (Soccer Special)
+- `G` : Forward Left Sharp Cut (Left Motor at 10% speed)
+- `I` : Forward Right Sharp Cut (Right Motor at 10% speed)
+- `H` : Backward Left Sharp Cut (Left Motor at -10% speed)
+- `J` : Backward Right Sharp Cut (Right Motor at -10% speed)
+
+### 📊 App Speed Slider Codes
+- Supports step-less configuration keys `0` (Stop) through `9` ($90\%$ speed) up to `q` (Maximum $100\%$ Speed).
+
+---
+
+## 📚 Library Installation Guide
+1. Open your **Arduino IDE**.
+2. Navigate to **Sketch** -> **Include Library** -> **Manage Libraries...**
+3. Type **`IBusBM`** in the search filter.
+4. Install the official version developed by *BM*. 
+5. *(The `SoftwareSerial` library is natively built-in; no separate download is necessary).*
