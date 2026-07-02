@@ -1,4 +1,4 @@
-Hybrid Remote & Bluetooth Soccer Bot
+Hybrid Soccer Bot using Remote & Bluetooth Soccer Bot
 
 A high-performance, responsive hybrid robotic platform optimized specifically for Robo-Soccer Matches. This system features an automatic dual-control mechanism that
 seamlessly switches between a FlySky i6X Transmitter (using the zero-lag i-BUS protocol) and a Smartphone Controller via Bluetooth, ensuring continuous action during
